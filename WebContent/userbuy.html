@@ -1,0 +1,380 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>Hello Amaze UI</title>
+
+  <!-- Set render engine for 360 browser -->
+  <meta name="renderer" content="webkit">
+
+  <!-- No Baidu Siteapp-->
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+  <link rel="icon" type="image/png" href="assets/i/favicon.png">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+  <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+
+  <!-- Tile icon for Win8 (144x144 + tile color) -->
+  <meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+  <meta name="msapplication-TileColor" content="#0e90d2">
+
+  <link rel="stylesheet" href="assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+	<script src="assets/js/jquery.min.js"></script>
+		<script>
+			function setCookie(cname,cvalue,exdays)
+{
+  var d = new Date();
+  d.setTime(d.getTime()+(exdays*24*60*60*1000));
+  var expires = "expires="+d.toGMTString();
+  document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+	
+	function getCookie(cname)
+{
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0; i<ca.length; i++) 
+  {
+    var c = ca[i].trim();
+    if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+  }
+  return "";
+}
+	function logout(){
+		 function delCookie(key) {
+        var date = new Date();
+        date.setTime(date.getTime() - 1);
+        var delValue = getCookie(key);
+        if (!!delValue) {
+            document.cookie = key+'='+delValue+';expires='+date.toGMTString();
+        }
+    }
+		delCookie("nickname");
+		delCookie("userid");
+		delCookie("admin");
+		window.location.href="index.html";
+	}
+			
+			
+function getQueryString(name) {
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null) return r[2]; return null;
+}
+			
+</script>	
+	
+</head>
+<!公共头部>
+<header class="am-topbar am-topbar-inverse">
+  <h1 class="am-topbar-brand">
+   <img class="am-circle" src="http://amazeui.shopxo.net/static/images/100.jpg" width="40" height="40"/>
+  </h1>
+
+  <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#doc-topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+  <div class="am-collapse am-topbar-collapse" id="doc-topbar-collapse">
+    <ul class="am-nav am-nav-pills am-topbar-nav">
+      <li><a href="user.html">个人资料</a></li>
+	<li><a href="userlikes.html?likespage=1">我的收藏</a></li>
+     <li><a href="shoppingCart.html?SCpage=1">我的购物车</a></li>
+	<li class="am-active"><a href="userbuy.html?buypage=1">我的已购</a></li>
+		<li><a href="index.html">返回首页</a></li>
+		<button class="am-btn am-btn-primary am-topbar-btn" data-am-modal="{target: '#QRcode'}" id="money">充值(余额)</button>
+    </ul>
+
+
+
+   
+
+    <div class="am-topbar-right">
+      <button class="am-btn am-btn-primary am-topbar-btn am-btn-sm" onClick="logout()">退出登录</button>
+    </div>
+  </div>
+</header>
+<body>
+<!--在这里编写你的代码-->
+ <div class="am-g" >
+  <div class="am-u-sm-3">4</div>
+  <div class="am-u-sm-6">
+	  <div align="center">
+	 <img class="am-circle" src="http://amazeui.shopxo.net/static/images/100.jpg" width="140" height="140"/>
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">
+    <h3 class="am-panel-title" id="username">user</h3>
+  </div>
+  <div class="am-panel-bd">
+    <p>这里是您的已购记录。<br>（为保护您的权益，暂不提供删除功能)</p>
+  </div>
+  <table class="am-table am-table-centered">
+   <thead>
+        <tr>
+			<th>订单号</th>
+            <th>商品</th>
+            <th>单价</th>
+			<th>数量</th>
+			<th>总价</th>
+			<th>时间</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td id="buy_id_1">用户名</td>
+            <td id="buy_book_1">http://amazeui.org</td>
+			<td id="buy_price_1"></td>
+			<td id="buy_num_1"></td>
+			<td id="buy_priceALL_1"></td>
+			<td id="buy_date_1"></td>
+        </tr>
+        <tr>
+            <td id="buy_id_2">用户名</td>
+            <td id="buy_book_2">http://amazeui.org</td>
+			<td id="buy_price_2"></td>
+			<td id="buy_num_2"></td>
+			<td id="buy_priceALL_2"></td>
+			<td id="buy_date_2"></td>
+        </tr>
+		<tr>
+            <td id="buy_id_3">用户名</td>
+            <td id="buy_book_3">http://amazeui.org</td>
+			<td id="buy_price_3"></td>
+			<td id="buy_num_3"></td>
+			<td id="buy_priceALL_3"></td>
+			<td id="buy_date_3"></td>
+        </tr>
+        <tr>
+            <td id="buy_id_4">用户名</td>
+            <td id="buy_book_4">http://amazeui.org</td>
+			<td id="buy_price_4"></td>
+			<td id="buy_num_4"></td>
+			<td id="buy_priceALL_4"></td>
+			<td id="buy_date_4"></td>
+        </tr>
+        <tr>
+            <td id="buy_id_5">用户名</td>
+            <td id="buy_book_5">http://amazeui.org</td>
+			<td id="buy_price_5"></td>
+			<td id="buy_num_5"></td>
+			<td id="buy_priceALL_5"></td>
+			<td id="buy_date_5"></td>
+        </tr>
+        <tr>
+            <td id="buy_id_6">用户名</td>
+            <td id="buy_book_6">http://amazeui.org</td>
+			<td id="buy_price_6"></td>
+			<td id="buy_num_6"></td>
+			<td id="buy_priceALL_6"></td>
+			<td id="buy_date_6"></td>
+        </tr>
+		<tr>
+            <td id="buy_id_7">用户名</td>
+            <td id="buy_book_7">http://amazeui.org</td>
+			<td id="buy_price_7"></td>
+			<td id="buy_num_7"></td>
+			<td id="buy_priceALL_7"></td>
+			<td id="buy_date_7"></td>
+        </tr>
+		<tr>
+            <td id="buy_id_8">用户名</td>
+            <td id="buy_book_8">http://amazeui.org</td>
+			<td id="buy_price_8"></td>
+			<td id="buy_num_8"></td>
+			<td id="buy_priceALL_8"></td>
+			<td id="buy_date_8"></td>
+        </tr>
+    </tbody>
+  </table>
+  <ul class="am-pagination am-pagination-centered">
+  <li class="am-disabled"><a href="#">&laquo;</a></li>
+ <li id="buypage1"><a href="userbuy.html?buypage=1">1</a></li>
+  <li id="buypage2"><a href="userbuy.html?buypage=2">2</a></li>
+  <li id="buypage3"><a href="userbuy.html?buypage=3">3</a></li>
+  <li id="buypage4"><a href="userbuy.html?buypage=4">4</a></li>
+  <li id="buypage5"><a href="userbuy.html?buypage=5">5</a></li>
+  <li><a href="#">&raquo;</a></li>
+</ul>
+</div>
+	</div>
+</div>
+  <div class="am-u-sm-3">8</div>
+</div> 
+
+	
+<!公共底部>
+ <footer data-am-widget="footer"
+          class="am-footer am-footer-default"
+           data-am-footer="{  }">
+    <div class="am-footer-switch">
+    <span class="am-footer-ysp" data-rel="mobile"
+          data-am-modal="{target: '#am-switch-mode'}">
+          云适配版
+    </span>
+      <span class="am-footer-divider"> | </span>
+      <a id="godesktop" data-rel="desktop" class="am-footer-desktop" href="javascript:">
+          电脑版
+      </a>
+    </div>
+    <div class="am-footer-miscs ">
+
+          <p>由<a href="JKL.html">JKL团队</a>
+            提供技术支持</p>
+        <p>CopyRight©2020  AllMobilize Inc.</p>
+        <p><a href="http://www.beian.miit.gov.cn/">粤ICP备20036114</a></p>
+    </div>
+  </footer>
+
+  <div id="am-footer-modal"
+       class="am-modal am-modal-no-btn am-switch-mode-m am-switch-mode-m-default">
+    <div class="am-modal-dialog">
+      <div class="am-modal-hd am-modal-footer-hd">
+        <a href="javascript:void(0)" data-dismiss="modal" class="am-close am-close-spin " data-am-modal-close>&times;</a>
+      </div>
+      <div class="am-modal-bd">
+          您正在浏览的是
+
+        <span class="am-switch-mode-owner">
+            云适配
+        </span>
+
+        <span class="am-switch-mode-slogan">
+              为您当前手机订制的移动网站。
+        </span>
+      </div>
+    </div>
+  </div>
+	
+		<div class="am-modal am-modal-no-btn" tabindex="-1" id="QRcode">
+  <div class="am-modal-dialog">
+    <div class="am-modal-hd">请扫码后根据指引充值！
+      <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+    </div>
+    <div class="am-modal-bd">
+      <img src="images/QRcode.png">
+    </div>
+  </div>
+</div>
+
+	<script>
+	 function start() {
+	      var nickname=getCookie("nickname");
+	  		var userid=getCookie("userid");
+			 var buypage = getQueryString("buypage");
+		 var isAdmin = getCookie("admin");
+            if(nickname != ""){
+		 document.getElementById("username").innerHTML = nickname; 
+	  }
+	  if(nickname == "" || isAdmin=="1"){
+		  alert("未登录或登录角色不符！");
+		   window.location.href="login.html";
+		  return false;
+	  }
+	  document.getElementById("buypage"+buypage).className = "am-active";
+            $.ajax({            //几个参数需要注意一下
+                type: "POST",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: "/EComerenceServlet/userbuy" ,//url
+                data: "userid="+userid+"&buypage="+buypage,//传入用户id，页码。格式：user_id=****&buypage=**** 页码为buypage，值为1~5，每页取8个值，如page为1时取前8，2时为9-16，以此类推. &为连接两个key的连接符，收到的请求可能已经分开两个key，如果未分开，则需要根据&分开                  
+                success: function (respond) {//响应中需要buy_book(书名),buy_id（订单号）,buy_price（书单价）,buy_num（数量）,buy_priceALL（总价）,buy_date(订单时间)每个字段需要8个参考下列
+					document.getElementById("buy_id_1").innerHTML = respond.buy_id_1;
+					document.getElementById("buy_id_2").innerHTML = respond.buy_id_2;
+					document.getElementById("buy_id_3").innerHTML = respond.buy_id_3;
+					document.getElementById("buy_id_4").innerHTML = respond.buy_id_4;
+					document.getElementById("buy_id_5").innerHTML = respond.buy_id_5;
+					document.getElementById("buy_id_6").innerHTML = respond.buy_id_6;
+					document.getElementById("buy_id_7").innerHTML = respond.buy_id_7;
+					document.getElementById("buy_id_8").innerHTML = respond.buy_id_8;
+					
+					document.getElementById("buy_book_1").innerHTML = respond.buy_book_1;
+					document.getElementById("buy_book_2").innerHTML = respond.buy_book_2;
+					document.getElementById("buy_book_3").innerHTML = respond.buy_book_3;
+					document.getElementById("buy_book_4").innerHTML = respond.buy_book_4;
+					document.getElementById("buy_book_5").innerHTML = respond.buy_book_5;
+					document.getElementById("buy_book_6").innerHTML = respond.buy_book_6;
+					document.getElementById("buy_book_7").innerHTML = respond.buy_book_7;
+					document.getElementById("buy_book_8").innerHTML = respond.buy_book_8;
+					
+					document.getElementById("buy_price_1").innerHTML = respond.buy_price_1; 
+					document.getElementById("buy_price_2").innerHTML = respond.buy_price_2;
+					document.getElementById("buy_price_3").innerHTML = respond.buy_price_3;
+					document.getElementById("buy_price_4").innerHTML = respond.buy_price_4;
+					document.getElementById("buy_price_5").innerHTML = respond.buy_price_5;
+					document.getElementById("buy_price_6").innerHTML = respond.buy_price_6;
+					document.getElementById("buy_price_7").innerHTML = respond.buy_price_7;
+					document.getElementById("buy_price_8").innerHTML = respond.buy_price_8;
+					
+					document.getElementById("buy_num_1").innerHTML = respond.buy_num_1; 
+					document.getElementById("buy_num_2").innerHTML = respond.buy_num_2;
+					document.getElementById("buy_num_3").innerHTML = respond.buy_num_3;
+					document.getElementById("buy_num_4").innerHTML = respond.buy_num_4;
+					document.getElementById("buy_num_5").innerHTML = respond.buy_num_5;
+					document.getElementById("buy_num_6").innerHTML = respond.buy_num_6;
+					document.getElementById("buy_num_7").innerHTML = respond.buy_num_7;
+					document.getElementById("buy_num_8").innerHTML = respond.buy_num_8;
+					
+					document.getElementById("buy_priceALL_1").innerHTML = respond.buy_priceALL_1; 
+					document.getElementById("buy_priceALL_2").innerHTML = respond.buy_priceALL_2;
+					document.getElementById("buy_priceALL_3").innerHTML = respond.buy_priceALL_3;
+					document.getElementById("buy_priceALL_4").innerHTML = respond.buy_priceALL_4;
+					document.getElementById("buy_priceALL_5").innerHTML = respond.buy_priceALL_5;
+					document.getElementById("buy_priceALL_6").innerHTML = respond.buy_priceALL_6;
+					document.getElementById("buy_priceALL_7").innerHTML = respond.buy_priceALL_7;
+					document.getElementById("buy_priceALL_8").innerHTML = respond.buy_priceALL_8;
+					
+					document.getElementById("buy_date_1").innerHTML = respond.buy_date_1; 
+					document.getElementById("buy_date_2").innerHTML = respond.buy_date_2;
+					document.getElementById("buy_date_3").innerHTML = respond.buy_date_3;
+					document.getElementById("buy_date_4").innerHTML = respond.buy_date_4;
+					document.getElementById("buy_date_5").innerHTML = respond.buy_date_5;
+					document.getElementById("buy_date_6").innerHTML = respond.buy_date_6;
+					document.getElementById("buy_date_7").innerHTML = respond.buy_date_7;
+					document.getElementById("buy_date_8").innerHTML = respond.buy_date_8;
+					
+                },                
+                error : function() {
+                    alert("异常！");
+                }
+            });
+		 $.ajax({            //几个参数需要注意一下
+                type: "POST",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: "/EComerenceServlet/balance" ,//url
+                data: "userid="+userid,                
+                success: function (respond) {
+					document.getElementById("money").innerHTML = "充值(余额："+respond.balance+")";
+                },                
+                error : function() {
+                    alert("异常！");
+                }
+            });
+		 
+		}
+	  start();
+		
+
+	</script>
+<!--[if (gte IE 9)|!(IE)]><!-->
+
+<!--<![endif]-->
+<!--[if lte IE 8 ]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+<script src="assets/js/amazeui.min.js"></script>
+
+</body>
+</html>

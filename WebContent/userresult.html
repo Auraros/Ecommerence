@@ -1,0 +1,528 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>Hello Amaze UI</title>
+
+  <!-- Set render engine for 360 browser -->
+  <meta name="renderer" content="webkit">
+
+  <!-- No Baidu Siteapp-->
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+  <link rel="icon" type="image/png" href="assets/i/favicon.png">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+  <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+
+  <!-- Tile icon for Win8 (144x144 + tile color) -->
+  <meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+  <meta name="msapplication-TileColor" content="#0e90d2">
+
+  <link rel="stylesheet" href="assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+	<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+	<script src="assets/js/jquery.min.js"></script>
+<script>
+window.PAGE=0;
+				
+	function getCookie(cname)
+{
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0; i<ca.length; i++) 
+  {
+    var c = ca[i].trim();
+    if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+  }
+  return "";
+}
+	function logout(){
+		 function delCookie(key) {
+        var date = new Date();
+        date.setTime(date.getTime() - 1);
+        var delValue = getCookie(key);
+        if (!!delValue) {
+            document.cookie = key+'='+delValue+';expires='+date.toGMTString();
+        }
+    }
+		delCookie("nickname");
+		delCookie("userid");
+		delCookie("admin");
+		window.location.href="index.html";
+	}
+			
+
+	function PAGEchange(a){
+	PAGE+=a;
+	if(PAGE<0){alert("页首了亲");return false;}
+	document.getElementById("P1").innerHTML=(5*PAGE+1).toString();
+	document.getElementById("P2").innerHTML=(5*PAGE+2).toString();
+	document.getElementById("P3").innerHTML=(5*PAGE+3).toString();
+	document.getElementById("P4").innerHTML=(5*PAGE+4).toString();
+	document.getElementById("P5").innerHTML=(5*PAGE+5).toString();
+	gopage(1);
+}
+		
+function start(){
+	
+	var isAdmin=getCookie("admin");
+		if ( isAdmin=="1" ){
+		}else{
+				alert("非管理员登录！");
+			window.location.href="login.html";
+		return false;
+		}
+	
+	window.nickname = getCookie("nickname");
+	window.userresultpage = document.getElementById("page").value;
+	
+	document.getElementById("userresultpage1").className="";
+	document.getElementById("userresultpage2").className="";
+	document.getElementById("userresultpage3").className="";
+	document.getElementById("userresultpage4").className="";
+	document.getElementById("userresultpage5").className="";
+	
+		userresultpage = (parseInt(userresultpage)%5).toString();
+	if(userresultpage=="0"){userresultpage="5";}
+	
+	document.getElementById("userresultpage"+userresultpage).className="am-active";
+	
+	if (nickname != ""){
+		document.getElementById("nickname").innerHTML = nickname;
+	}else{
+		//window.location.href("index.html");
+	}
+	seacher();
+	
+}		
+	
+function deluser(index){
+	var userid = document.getElementById("phone_number_"+index.toString()).innerHTML;
+	$.ajax({            //几个参数需要注意一下
+                type: "POST",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: "/EComerenceServlet/deluser" ,//url
+                data: "userid="+userid,                
+                success: function (respond) {
+                	if (respond.result == "true"){
+						alert("删除成功");
+						location.reload(); 
+					}else{alert("删除失败");}	
+                },                
+                error : function() {
+                    alert("异常！");
+                }
+            });
+}	
+		
+function gopage(page){
+	
+	document.getElementById("page").value=page+5*PAGE;
+	start();
+}		
+		
+function change(index){
+	var users_id = document.getElementById("email_"+index.toString()).innerHTML;
+	window.open("adminchangeuserinfo.html?user_id="+users_id);
+}
+		
+function seacher(){
+
+		
+	$.ajax({            //几个参数需要注意一下
+                type: "POST",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: "/EComerenceServlet/userresult" ,//url
+                data:$('#seacher_form').serialize(),                
+                success: function (respond) {
+                	console.log(respond);
+					
+					document.getElementById("users_id_1").innerHTML = respond.users_id_1;
+					document.getElementById("nickname_1").innerHTML = respond.nickname_1;
+					document.getElementById("real_name_1").innerHTML = respond.real_name_1;
+					document.getElementById("id_card_1").innerHTML = respond.id_card_1;
+					document.getElementById("phone_number_1").innerHTML = respond.phone_number_1;
+					document.getElementById("email_1").innerHTML = respond.email_1;
+					document.getElementById("birthday_1").innerHTML = respond.birthday_1;
+					document.getElementById("sex_1").innerHTML = respond.sex_1;
+					document.getElementById("address_1").innerHTML = respond.address_1;	
+					document.getElementById("price_1").innerHTML = respond.price_1;
+					
+					
+					document.getElementById("users_id_2").innerHTML = respond.users_id_2;
+					document.getElementById("nickname_2").innerHTML = respond.nickname_2;
+					document.getElementById("real_name_2").innerHTML = respond.real_name_2;
+					document.getElementById("id_card_2").innerHTML = respond.id_card_2;
+					document.getElementById("phone_number_2").innerHTML = respond.phone_number_2;
+					document.getElementById("email_2").innerHTML = respond.email_2;
+					document.getElementById("birthday_2").innerHTML = respond.birthday_2;
+					document.getElementById("sex_2").innerHTML = respond.sex_2;
+					document.getElementById("address_2").innerHTML = respond.address_2;	
+					document.getElementById("price_2").innerHTML = respond.price_2;
+					
+					document.getElementById("users_id_3").innerHTML = respond.users_id_3;
+					document.getElementById("nickname_3").innerHTML = respond.nickname_3;
+					document.getElementById("real_name_3").innerHTML = respond.real_name_3;
+					document.getElementById("id_card_3").innerHTML = respond.id_card_3;
+					document.getElementById("phone_number_3").innerHTML = respond.phone_number_3;
+					document.getElementById("email_3").innerHTML = respond.email_3;
+					document.getElementById("birthday_3").innerHTML = respond.birthday_3;
+					document.getElementById("sex_3").innerHTML = respond.sex_3;
+					document.getElementById("address_3").innerHTML = respond.address_3;	
+					document.getElementById("price_3").innerHTML = respond.price_3;
+					
+					document.getElementById("users_id_4").innerHTML = respond.users_id_4;
+					document.getElementById("nickname_4").innerHTML = respond.nickname_4;
+					document.getElementById("real_name_4").innerHTML = respond.real_name_4;
+					document.getElementById("id_card_4").innerHTML = respond.id_card_4;
+					document.getElementById("phone_number_4").innerHTML = respond.phone_number_4;
+					document.getElementById("email_4").innerHTML = respond.email_4;
+					document.getElementById("birthday_4").innerHTML = respond.birthday_4;
+					document.getElementById("sex_4").innerHTML = respond.sex_4;
+					document.getElementById("address_4").innerHTML = respond.address_4;	
+					document.getElementById("price_4").innerHTML = respond.price_4;
+					
+					document.getElementById("users_id_5").innerHTML = respond.users_id_5;
+					document.getElementById("nickname_5").innerHTML = respond.nickname_5;
+					document.getElementById("real_name_5").innerHTML = respond.real_name_5;
+					document.getElementById("id_card_5").innerHTML = respond.id_card_5;
+					document.getElementById("phone_number_5").innerHTML = respond.phone_number_5;
+					document.getElementById("email_5").innerHTML = respond.email_5;
+					document.getElementById("birthday_5").innerHTML = respond.birthday_5;
+					document.getElementById("sex_5").innerHTML = respond.sex_5;
+					document.getElementById("address_5").innerHTML = respond.address_5;	
+					document.getElementById("price_5").innerHTML = respond.price_5;
+					
+					document.getElementById("users_id_6").innerHTML = respond.users_id_6;
+					document.getElementById("nickname_6").innerHTML = respond.nickname_6;
+					document.getElementById("real_name_6").innerHTML = respond.real_name_6;
+					document.getElementById("id_card_6").innerHTML = respond.id_card_6;
+					document.getElementById("phone_number_6").innerHTML = respond.phone_number_6;
+					document.getElementById("email_6").innerHTML = respond.email_6;
+					document.getElementById("birthday_6").innerHTML = respond.birthday_6;
+					document.getElementById("sex_6").innerHTML = respond.sex_6;
+					document.getElementById("address_6").innerHTML = respond.address_6;	
+					document.getElementById("price_6").innerHTML = respond.price_6;
+					
+					document.getElementById("users_id_7").innerHTML = respond.users_id_7;
+					document.getElementById("nickname_7").innerHTML = respond.nickname_7;
+					document.getElementById("real_name_7").innerHTML = respond.real_name_7;
+					document.getElementById("id_card_7").innerHTML = respond.id_card_7;
+					document.getElementById("phone_number_7").innerHTML = respond.phone_number_7;
+					document.getElementById("email_7").innerHTML = respond.email_7;
+					document.getElementById("birthday_7").innerHTML = respond.birthday_7;
+					document.getElementById("sex_7").innerHTML = respond.sex_7;
+					document.getElementById("address_7").innerHTML = respond.address_7;	
+					document.getElementById("price_7").innerHTML = respond.price_7;
+					
+					document.getElementById("users_id_8").innerHTML = respond.users_id_8;
+					document.getElementById("nickname_8").innerHTML = respond.nickname_8;
+					document.getElementById("real_name_8").innerHTML = respond.real_name_8;
+					document.getElementById("id_card_8").innerHTML = respond.id_card_8;
+					document.getElementById("phone_number_8").innerHTML = respond.phone_number_8;
+					document.getElementById("email_8").innerHTML = respond.email_8;
+					document.getElementById("birthday_8").innerHTML = respond.birthday_8;
+					document.getElementById("sex_8").innerHTML = respond.sex_8;
+					document.getElementById("address_8").innerHTML = respond.address_8;	
+					document.getElementById("price_8").innerHTML = respond.price_8;
+					
+                },                
+                error : function() {
+                    alert("异常！");
+                }
+            });
+}		
+</script>		
+	
+</head>
+<!公共头部>
+<header class="am-topbar am-topbar-inverse">
+  <h1 class="am-topbar-brand">
+   <img class="am-circle" src="http://amazeui.shopxo.net/static/images/100.jpg" width="40" height="40"/>
+  </h1>
+
+  <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#doc-topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+  <div class="am-collapse am-topbar-collapse" id="doc-topbar-collapse">
+    <ul class="am-nav am-nav-pills am-topbar-nav">
+      <li><a href="admin.html">个人资料</a></li>
+	<li ><a href="bookreslut.html">管理书籍</a></li>
+     <li class="am-active"><a href="userresult.html">管理用户</a></li>
+		<li><a href="index.html">返回首页</a></li>
+    </ul>
+
+
+
+   
+
+    <div class="am-topbar-right">
+      <button class="am-btn am-btn-primary am-topbar-btn am-btn-sm" onClick="logout()">退出登录</button>
+    </div>
+  </div>
+</header>
+<body>
+<!--在这里编写你的代码-->
+ <div class="am-g" >
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">
+    <h3 class="am-panel-title" id="nickname">user</h3>
+  </div>
+  <div class="am-panel-bd">
+  <form id="seacher_form">
+	<div class="am-input-group am-input-group-primary">
+  <span class="am-input-group-label"><i class="fas fa-user am-icon-fw"></i></span>
+  <input type="text" class="am-form-field" name="nickname" placeholder="用户名">
+</div>
+
+<div class="am-input-group am-input-group-primary">
+   <span class="am-input-group-label"><i class="am-icon-user am-icon-fw"></i></span>
+  <input type="text" class="am-form-field" name="real_name" placeholder="真实姓名">
+</div>
+	  <div class="am-input-group am-input-group-primary">
+   <span class="am-input-group-label"><i class="am-icon-user am-icon-fw"></i></span>
+  <input type="text" class="am-form-field" name="id_card" placeholder="身份证">
+</div>
+	  <div class="am-input-group am-input-group-primary">
+   <span class="am-input-group-label"><i class="am-icon-user am-icon-fw"></i></span>
+  <input type="text" class="am-form-field" name="phone_number" placeholder="手机号">
+</div>
+	<div class="am-input-group am-input-group-primary">
+   <span class="am-input-group-label"><i class="am-icon-user am-icon-fw"></i></span>
+  <input type="text" class="am-form-field" name="email" placeholder="邮箱">
+</div>
+	  
+	 <font>性别：</font>
+	  <select name="sex">
+  <option value="男">男</option>
+  <option value="女">女</option>
+</select>
+	  	  
+  <font><br> 生日：</font>
+	  <div class="am-input-group am-datepicker-date" data-am-datepicker="{format: 'yyyy-mm-dd'}">
+  <input type="text" class="am-form-field" placeholder="生日起" readonly>
+  <span class="am-input-group-btn am-datepicker-add-on">
+    <button class="am-btn am-btn-default" type="button"><span class="am-icon-calendar"></span> </button>
+  </span></div>
+		  <div class="am-input-group am-datepicker-date" data-am-datepicker="{format: 'yyyy-mm-dd'}">
+		  <input type="text" class="am-form-field" placeholder="生日止" readonly>
+  <span class="am-input-group-btn am-datepicker-add-on">
+    <button class="am-btn am-btn-default" type="button"><span class="am-icon-calendar"></span> </button>
+  </span>
+		<input type="hidden" name="bookreslutpage" id="page" value="1"><br>  
+		  
+</div>
+	  </form>
+</div>
+	 
+ 
+	<button class="am-btn am-btn-primary am-topbar-btn am-btn-sm am-center" onClick="seacher()">点此搜索</button>
+  </div>
+  <table class="am-table am-table-centered">
+   <thead>
+        <tr>
+            <th>ID</th>
+            <th>用户名</th>
+			<th>真实姓名</th>
+			<th>身份证</th>
+			<th>手机号</th>
+			<th>邮箱</th>
+			<th>生日</th>
+			<th>性别</th>
+			<th>地址</th>
+			<th>余额</th>
+			<th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td id="users_id_1">用户名</td>
+            <td id="nickname_1">http://amazeui.org</td>
+			<td id="real_name_1">用户名</td>
+            <td id="id_card_1">http://amazeui.org</td>
+			<td id="phone_number_1">用户名</td>
+            <td id="email_1">http://amazeui.org</td>
+			<td id="birthday_1">用户名</td>
+            <td id="sex_1">http://amazeui.org</td>
+			<td id="address_1">用户名</td>
+            <td id="price_1">http://amazeui.org</td>
+			<td><button class="am-badge am-badge-secondary" onClick="change(1)">修改</button><button class="am-badge am-badge-danger" onClick="deluser(1)">删除</button></td>
+        </tr>
+        <tr>
+              <td id="users_id_2">用户名</td>
+            <td id="nickname_2">http://amazeui.org</td>
+			<td id="real_name_2">用户名</td>
+            <td id="id_card_2">http://amazeui.org</td>
+			<td id="phone_number_2">用户名</td>
+            <td id="email_2">http://amazeui.org</td>
+			<td id="birthday_2">用户名</td>
+            <td id="sex_2">http://amazeui.org</td>
+			<td id="address_2">用户名</td>
+            <td id="price_2">http://amazeui.org</td>
+			<td><button class="am-badge am-badge-secondary" onClick="change(2)">修改</button><button class="am-badge am-badge-danger" onClick="deluser(2)">删除</button></td>
+        </tr>
+		<tr>
+               <td id="users_id_3">用户名</td>
+            <td id="nickname_3">http://amazeui.org</td>
+			<td id="real_name_3">用户名</td>
+            <td id="id_card_3">http://amazeui.org</td>
+			<td id="phone_number_3">用户名</td>
+            <td id="email_3">http://amazeui.org</td>
+			<td id="birthday_3">用户名</td>
+            <td id="sex_3">http://amazeui.org</td>
+			<td id="address_3">用户名</td>
+            <td id="price_3">http://amazeui.org</td>
+			<td><button class="am-badge am-badge-secondary" onClick="change(3)">修改</button><button class="am-badge am-badge-danger" onClick="deluser(3)">删除</button></td>
+        </tr>
+        <tr>
+               <td id="users_id_4">用户名</td>
+            <td id="nickname_4">http://amazeui.org</td>
+			<td id="real_name_4">用户名</td>
+            <td id="id_card_4">http://amazeui.org</td>
+			<td id="phone_number_4">用户名</td>
+            <td id="email_4">http://amazeui.org</td>
+			<td id="birthday_4">用户名</td>
+            <td id="sex_4">http://amazeui.org</td>
+			<td id="address_4">用户名</td>
+            <td id="price_4">http://amazeui.org</td>
+			<td><button class="am-badge am-badge-secondary" onClick="change(4)">修改</button><button class="am-badge am-badge-danger" onClick="deluser(4)">删除</button></td>
+        </tr>
+        <tr>
+               <td id="users_id_5">用户名</td>
+            <td id="nickname_5">http://amazeui.org</td>
+			<td id="real_name_5">用户名</td>
+            <td id="id_card_5">http://amazeui.org</td>
+			<td id="phone_number_5">用户名</td>
+            <td id="email_5">http://amazeui.org</td>
+			<td id="birthday_5">用户名</td>
+            <td id="sex_5">http://amazeui.org</td>
+			<td id="address_5">用户名</td>
+            <td id="price_5">http://amazeui.org</td>
+			<td><button class="am-badge am-badge-secondary" onClick="change(5)">修改</button><button class="am-badge am-badge-danger" onClick="deluser(5)">删除</button></td>
+        </tr>
+        <tr>
+              <td id="users_id_6">用户名</td>
+            <td id="nickname_6">http://amazeui.org</td>
+			<td id="real_name_6">用户名</td>
+            <td id="id_card_6">http://amazeui.org</td>
+			<td id="phone_number_6">用户名</td>
+            <td id="email_6">http://amazeui.org</td>
+			<td id="birthday_6">用户名</td>
+            <td id="sex_6">http://amazeui.org</td>
+			<td id="address_6">用户名</td>
+            <td id="price_6">http://amazeui.org</td>
+			<td><button class="am-badge am-badge-secondary" onClick="change(6)">修改</button><button class="am-badge am-badge-danger" onClick="deluser(6)">删除</button></td>
+        </tr>
+		<tr>
+              <td id="users_id_7">用户名</td>
+            <td id="nickname_7">http://amazeui.org</td>
+			<td id="real_name_7">用户名</td>
+            <td id="id_card_7">http://amazeui.org</td>
+			<td id="phone_number_7">用户名</td>
+            <td id="email_7">http://amazeui.org</td>
+			<td id="birthday_7">用户名</td>
+            <td id="sex_7">http://amazeui.org</td>
+			<td id="address_7">用户名</td>
+            <td id="price_7">http://amazeui.org</td>
+			<td><button class="am-badge am-badge-secondary" onClick="change(7)">修改</button><button class="am-badge am-badge-danger" onClick="deluser(7)">删除</button></td>
+        </tr>
+		<tr>
+               <td id="users_id_8">用户名</td>
+            <td id="nickname_8">http://amazeui.org</td>
+			<td id="real_name_8">用户名</td>
+            <td id="id_card_8">http://amazeui.org</td>
+			<td id="phone_number_8">用户名</td>
+            <td id="email_8">http://amazeui.org</td>
+			<td id="birthday_8">用户名</td>
+            <td id="sex_8">http://amazeui.org</td>
+			<td id="address_8">用户名</td>
+            <td id="price_8">http://amazeui.org</td>
+			<td><button class="am-badge am-badge-secondary" onClick="change(8)">修改</button><button class="am-badge am-badge-danger" onClick="deluser(8)">删除</button></td>
+        </tr>
+    </tbody>
+  </table>
+  <ul class="am-pagination am-pagination-centered">
+  <li ><a href="#" onClick="PAGEchange(-1)">&laquo;</a></li>
+  <li id="userresultpage1"><a href="#" onClick="gopage(1)" id="P1">1</a></li>
+  <li id="userresultpage2"><a href="#" onClick="gopage(2)" id="P2">2</a></li>
+  <li id="userresultpage3"><a href="#" onClick="gopage(3)" id="P3">3</a></li>
+  <li id="userresultpage4"><a href="#" onClick="gopage(4)" id="P4">4</a></li>
+  <li id="userresultpage5"><a href="#" onClick="gopage(5)" id="P5">5</a></li>
+  <li><a href="#" onClick="PAGEchange(1)">&raquo;</a></li>
+</ul>
+</div>
+	</div>
+</div>
+
+<script>
+	start();
+	</script>
+
+	
+<!公共底部>
+ <footer data-am-widget="footer"
+          class="am-footer am-footer-default"
+           data-am-footer="{  }">
+    <div class="am-footer-switch">
+    <span class="am-footer-ysp" data-rel="mobile"
+          data-am-modal="{target: '#am-switch-mode'}">
+          云适配版
+    </span>
+      <span class="am-footer-divider"> | </span>
+      <a id="godesktop" data-rel="desktop" class="am-footer-desktop" href="javascript:">
+          电脑版
+      </a>
+    </div>
+    <div class="am-footer-miscs ">
+
+          <p>由<a herf="JKL.html">JKL团队</a>
+            提供技术支持</p>
+        <p>CopyRight©2020  AllMobilize Inc.</p>
+        <p><a href="http://www.beian.miit.gov.cn/">粤ICP备20036114</a></p>
+    </div>
+  </footer>
+
+  <div id="am-footer-modal"
+       class="am-modal am-modal-no-btn am-switch-mode-m am-switch-mode-m-default">
+    <div class="am-modal-dialog">
+      <div class="am-modal-hd am-modal-footer-hd">
+        <a href="javascript:void(0)" data-dismiss="modal" class="am-close am-close-spin " data-am-modal-close>&times;</a>
+      </div>
+      <div class="am-modal-bd">
+          您正在浏览的是
+
+        <span class="am-switch-mode-owner">
+            云适配
+        </span>
+
+        <span class="am-switch-mode-slogan">
+              为您当前手机订制的移动网站。
+        </span>
+      </div>
+    </div>
+  </div>
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+
+<!--<![endif]-->
+<!--[if lte IE 8 ]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+<script src="assets/js/amazeui.min.js"></script>
+
+</body>
+</html>

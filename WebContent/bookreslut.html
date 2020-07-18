@@ -1,0 +1,513 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>Hello Amaze UI</title>
+
+  <!-- Set render engine for 360 browser -->
+  <meta name="renderer" content="webkit">
+
+  <!-- No Baidu Siteapp-->
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+  <link rel="icon" type="image/png" href="assets/i/favicon.png">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+  <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+
+  <!-- Tile icon for Win8 (144x144 + tile color) -->
+  <meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+  <meta name="msapplication-TileColor" content="#0e90d2">
+
+  <link rel="stylesheet" href="assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+	<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+	<script src="assets/js/jquery.min.js"></script>
+
+</head>
+	<script>
+window.PAGE=0;
+				
+	function getCookie(cname)
+{
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0; i<ca.length; i++) 
+  {
+    var c = ca[i].trim();
+    if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+  }
+  return "";
+}
+	function logout(){
+		 function delCookie(key) {
+        var date = new Date();
+        date.setTime(date.getTime() - 1);
+        var delValue = getCookie(key);
+        if (!!delValue) {
+            document.cookie = key+'='+delValue+';expires='+date.toGMTString();
+        }
+    }
+		delCookie("nickname");
+		delCookie("userid");
+		delCookie("admin");
+		window.location.href="index.html";
+	}
+			
+function PAGEchange(a){
+	PAGE+=a;
+	if(PAGE<0){alert("页首了亲");return false;}
+	document.getElementById("P1").innerHTML=(5*PAGE+1).toString();
+	document.getElementById("P2").innerHTML=(5*PAGE+2).toString();
+	document.getElementById("P3").innerHTML=(5*PAGE+3).toString();
+	document.getElementById("P4").innerHTML=(5*PAGE+4).toString();
+	document.getElementById("P5").innerHTML=(5*PAGE+5).toString();
+	gopage(1);
+}
+		
+		
+function start(){
+		var isAdmin=getCookie("admin");
+		if ( isAdmin=="1" ){
+		}else{
+				alert("非管理员登录！");
+			window.location.href="login.html";
+		return false;
+		}
+	
+	window.nickname = getCookie("nickname");
+	window.bookresultpage = document.getElementById("page").value;
+	
+	document.getElementById("bookresultpage1").className="";
+	document.getElementById("bookresultpage2").className="";
+	document.getElementById("bookresultpage3").className="";
+	document.getElementById("bookresultpage4").className="";
+	document.getElementById("bookresultpage5").className="";
+	
+	bookresultpage = (parseInt(bookresultpage)%5).toString();
+	if(bookresultpage=="0"){bookresultpage="5";}
+	
+	document.getElementById("bookresultpage"+bookresultpage).className="am-active";
+	if (nickname != ""){
+		document.getElementById("nickname").innerHTML = nickname;
+	}else{
+		//window.location.href("index.html");
+	}
+	seacher();
+	
+}		
+	
+function delbook(index){
+	var books_id = document.getElementById("books_id_"+index.toString()).innerHTML;
+	$.ajax({            //几个参数需要注意一下
+                type: "POST",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: "/EComerenceServlet/delete_book" ,//url
+                data: "books_id="+books_id,                
+                success: function (respond) {
+                	if (respond.result == "true"){
+						alert("删除成功");
+						location.reload(); 
+					}else{alert("删除失败");}	
+                },                
+                error : function() {
+                    alert("异常！");
+                }
+            });
+}	
+		
+function gopage(page){
+	
+	document.getElementById("page").value=page+5*PAGE;
+	start();
+}		
+		
+function change(index){
+	var books_id = document.getElementById("books_id_"+index.toString()).innerHTML;
+	window.open("changebookinfo.html?books_id="+books_id);
+}
+		
+function seacher(){
+
+		
+	$.ajax({            //几个参数需要注意一下
+                type: "POST",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: "/EComerenceServlet/bookresult" ,//url
+                data:$('#seacher_form').serialize(),                
+                success: function (respond) {
+                	console.log(respond);
+					
+					document.getElementById("books_id_1").innerHTML = respond.books_id_1;
+					document.getElementById("name_1").innerHTML = respond.name_1;
+					document.getElementById("author_1").innerHTML = respond.author_1;
+					document.getElementById("kind_1").innerHTML = respond.kind_1;
+					document.getElementById("press_1").innerHTML = respond.press_1;
+					document.getElementById("press_date_1").innerHTML = respond.press_date_1;
+					document.getElementById("price_1").innerHTML = respond.price_1;
+					document.getElementById("merchant_1").innerHTML = respond.merchant_1;
+					
+					document.getElementById("books_id_2").innerHTML = respond.books_id_2;
+					document.getElementById("name_2").innerHTML = respond.name_2;
+					document.getElementById("author_2").innerHTML = respond.author_2;
+					document.getElementById("kind_2").innerHTML = respond.kind_2;
+					document.getElementById("press_2").innerHTML = respond.press_2;
+					document.getElementById("press_date_2").innerHTML = respond.press_date_2;
+					document.getElementById("price_2").innerHTML = respond.price_2;
+					document.getElementById("merchant_2").innerHTML = respond.merchant_2;
+					
+					document.getElementById("books_id_3").innerHTML = respond.books_id_3;
+					document.getElementById("name_3").innerHTML = respond.name_3;
+					document.getElementById("author_3").innerHTML = respond.author_3;
+					document.getElementById("kind_3").innerHTML = respond.kind_3;
+					document.getElementById("press_3").innerHTML = respond.press_3;
+					document.getElementById("press_date_3").innerHTML = respond.press_date_3;
+					document.getElementById("price_3").innerHTML = respond.price_3;
+					document.getElementById("merchant_3").innerHTML = respond.merchant_3;
+					
+					document.getElementById("books_id_4").innerHTML = respond.books_id_4;
+					document.getElementById("name_4").innerHTML = respond.name_4;
+					document.getElementById("author_4").innerHTML = respond.author_4;
+					document.getElementById("kind_4").innerHTML = respond.kind_4;
+					document.getElementById("press_4").innerHTML = respond.press_4;
+					document.getElementById("press_date_4").innerHTML = respond.press_date_4;
+					document.getElementById("price_4").innerHTML = respond.price_4;
+					document.getElementById("merchant_4").innerHTML = respond.merchant_4;
+					
+					document.getElementById("books_id_5").innerHTML = respond.books_id_5;
+					document.getElementById("name_5").innerHTML = respond.name_5;
+					document.getElementById("author_5").innerHTML = respond.author_5;
+					document.getElementById("kind_5").innerHTML = respond.kind_5;
+					document.getElementById("press_5").innerHTML = respond.press_5;
+					document.getElementById("press_date_5").innerHTML = respond.press_date_5;
+					document.getElementById("price_5").innerHTML = respond.price_5;
+					document.getElementById("merchant_5").innerHTML = respond.merchant_5;
+					
+					document.getElementById("books_id_6").innerHTML = respond.books_id_6;
+					document.getElementById("name_6").innerHTML = respond.name_6;
+					document.getElementById("author_6").innerHTML = respond.author_6;
+					document.getElementById("kind_6").innerHTML = respond.kind_6;
+					document.getElementById("press_6").innerHTML = respond.press_6;
+					document.getElementById("press_date_6").innerHTML = respond.press_date_6;
+					document.getElementById("price_6").innerHTML = respond.price_6;
+					document.getElementById("merchant_6").innerHTML = respond.merchant_6;
+					
+					document.getElementById("books_id_7").innerHTML = respond.books_id_7;
+					document.getElementById("name_7").innerHTML = respond.name_7;
+					document.getElementById("author_7").innerHTML = respond.author_7;
+					document.getElementById("kind_7").innerHTML = respond.kind_7;
+					document.getElementById("press_7").innerHTML = respond.press_7;
+					document.getElementById("press_date_7").innerHTML = respond.press_date_7;
+					document.getElementById("price_7").innerHTML = respond.price_7;
+					document.getElementById("merchant_7").innerHTML = respond.merchant_7;
+					
+					document.getElementById("books_id_8").innerHTML = respond.books_id_8;
+					document.getElementById("name_8").innerHTML = respond.name_8;
+					document.getElementById("author_8").innerHTML = respond.author_8;
+					document.getElementById("kind_8").innerHTML = respond.kind_8;
+					document.getElementById("press_8").innerHTML = respond.press_8;
+					document.getElementById("press_date_8").innerHTML = respond.press_date_8;
+					document.getElementById("price_8").innerHTML = respond.price_8;
+					document.getElementById("merchant_8").innerHTML = respond.merchant_8;
+					
+                },                
+                error : function() {
+                    alert("异常！");
+                }
+            });
+}		
+</script>	
+	
+<!公共头部>
+<header class="am-topbar am-topbar-inverse">
+  <h1 class="am-topbar-brand">
+   <img class="am-circle" src="http://amazeui.shopxo.net/static/images/100.jpg" width="40" height="40"/>
+  </h1>
+
+  <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#doc-topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+  <div class="am-collapse am-topbar-collapse" id="doc-topbar-collapse">
+    <ul class="am-nav am-nav-pills am-topbar-nav">
+      <li><a href="admin.html">个人资料</a></li>
+	<li class="am-active"><a href="bookresult.html">管理书籍</a></li>
+     <li><a href="userresult.html">管理用户</a></li>
+	<li><a href="index.html">返回首页</a></li>
+    </ul>
+
+
+
+   
+
+    <div class="am-topbar-right">
+      <a href="login.html"><button class="am-btn am-btn-primary am-topbar-btn am-btn-sm" onClick="logout()">退出登录</button></a>
+    </div>
+  </div>
+</header>
+<body>
+<!--在这里编写你的代码-->
+ <div class="am-g" >
+<div class="am-panel am-panel-primary">
+  <div class="am-panel-hd">
+    <h3 class="am-panel-title" id="nickname">user</h3>
+  </div>
+  <div class="am-panel-bd">
+  <form method="post" action="" id="seacher_form">
+	<div class="am-input-group am-input-group-primary">
+  <span class="am-input-group-label"><i class="fas fa-book am-icon-fw"></i></span>
+  <input name="book" id="book_find" type="text" class="am-form-field" placeholder="书名">
+</div>
+
+<div class="am-input-group am-input-group-primary">
+   <span class="am-input-group-label"><i class="am-icon-user am-icon-fw"></i></span>
+  <input name="author" id="author_find" type="text" class="am-form-field" placeholder="作者">
+</div>
+	  <div class="am-input-group am-input-group-primary">
+   <span class="am-input-group-label"><i class="am-icon-user am-icon-fw"></i></span>
+  <input name="merchant_id" id="merchant_id_find" type="text" class="am-form-field" placeholder="管理员ID">
+</div>
+	  
+	    <div class="am-input-group am-input-group-primary">
+   <span class="am-input-group-label"><i class="am-icon-user am-icon-fw"></i></span>
+  <input name="kind" id="kind" type="text" class="am-form-field" placeholder="类型，用“&”表示多个条件">
+</div>
+	  
+	    <div class="am-input-group am-input-group-primary">
+   <span class="am-input-group-label"><i class="am-icon-user am-icon-fw"></i></span>
+  <input name="press" id="press" type="text" class="am-form-field" placeholder="出版社，用“&”表示多个条件">
+</div>
+	
+	
+	  
+  <font><br> 出版日期：</font>
+	  <div class="am-input-group am-datepicker-date" data-am-datepicker="{format: 'yyyy-mm-dd'}">
+  <input name="press_date_start" id="pree_date_start_find" type="text" class="am-form-field" placeholder="出版日期起" value="" readonly>
+  <span class="am-input-group-btn am-datepicker-add-on">
+    <button class="am-btn am-btn-default" type="button" id="button1"><span class="am-icon-calendar"></span> </button>
+  </span></div>
+	  <div class="am-input-group am-datepicker-date" data-am-datepicker="{format: 'yyyy-mm-dd'}">
+		  <input name="press_date_end" id="pree_date_end_find" type="text" class="am-form-field" placeholder="出版日期止" value="" readonly>
+  <span class="am-input-group-btn am-datepicker-add-on">
+    <button class="am-btn am-btn-default" type="button" id="button2"><span class="am-icon-calendar"></span> </button>
+  </span>
+		  
+</div>
+	  <font> 价格区间：</font>
+	  
+  <div class="am-form-group ">
+   
+    <input name="price_start" id="price_start_find" type="text" class="am-form-field" placeholder="价格起">
+  </div>
+
+  <div class="am-form-group ">
+   
+    <input name="price_end"  id="price_end_find" type="text" class="am-form-field" placeholder="价格止">
+  </div>
+
+	  
+	 <font>结果按：</font>
+	  <select name="result_method">
+  <option id="result_price_find" value="price">价格</option>
+  <option id="result_pressdate_find" value="press_date">出版日期</option>
+	<option id="result_id_find" value="books_id">ID</option>
+</select>
+	  	  <select name="result_sort">
+  <option id="result_ASC_find" value="ASC">升序</option>
+  <option id="result_DESC_find" value="DESC">降序</option>
+</select>
+	  
+	  <input type="hidden" name="bookreslutpage" id="page" value="1"><br></form>
+</div>
+	 
+ 
+	<button class="am-btn am-btn-primary am-topbar-btn am-btn-sm am-center" onClick="seacher()">点此搜索</button>
+  </div>
+  <table class="am-table am-table-centered">
+   <thead>
+        <tr>
+            <th>ID</th>
+			<th>书名</th>
+			<th>作者</th>
+			<th>类型</th>
+			<th>出版社</th>
+			<th>出版日期</th>
+			<th>价格</th>
+			<th>管理员ID</th>
+			<th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+			<td id="books_id_1">用户名</td>
+			<td id="name_1">用户名</td>
+            <td id="author_1">http://amazeui.org</td>
+			<td id="kind_1">用户名</td>
+            <td id="press_1">http://amazeui.org</td>
+			<td id="press_date_1">用户名</td>
+            <td id="price_1">http://amazeui.org</td>
+			<td id="merchant_1">http://amazeui.org</td>
+			<td><button class="am-badge am-badge-secondary" onClick="change(1)">修改</button><button class="am-badge am-badge-danger" onClick="delbook(1)">删除</button></td>
+        </tr>
+        <tr>
+           <td id="books_id_2">用户名</td>
+			<td id="name_2">用户名</td>
+            <td id="author_2">http://amazeui.org</td>
+			<td id="kind_2">用户名</td>
+            <td id="press_2">http://amazeui.org</td>
+			<td id="press_date_2">用户名</td>
+            <td id="price_2">http://amazeui.org</td>
+			<td id="merchant_2">http://amazeui.org</td>
+			<td><button class="am-badge am-badge-secondary" onClick="change(2)">修改</button><button class="am-badge am-badge-danger" onClick="delbook(2)">删除</button></td>
+        </tr>
+		<tr>
+           <td id="books_id_3">用户名</td>
+			<td id="name_3">用户名</td>
+            <td id="author_3">http://amazeui.org</td>
+			<td id="kind_3">用户名</td>
+            <td id="press_3">http://amazeui.org</td>
+			<td id="press_date_3">用户名</td>
+            <td id="price_3">http://amazeui.org</td>
+			<td id="merchant_3">http://amazeui.org</td>
+			<td><button class="am-badge am-badge-secondary" onClick="change(3)">修改</button><button class="am-badge am-badge-danger" onClick="delbook(3)">删除</button></td>
+        </tr>
+        <tr>
+           <td id="books_id_4">用户名</td>
+			<td id="name_4">用户名</td>
+            <td id="author_4">http://amazeui.org</td>
+			<td id="kind_4">用户名</td>
+            <td id="press_4">http://amazeui.org</td>
+			<td id="press_date_4">用户名</td>
+            <td id="price_4">http://amazeui.org</td>
+			<td id="merchant_4">http://amazeui.org</td>
+			<td><button class="am-badge am-badge-secondary" onClick="change(4)">修改</button><button class="am-badge am-badge-danger" onClick="delbook(4)">删除</button></td>
+        </tr>
+        <tr>
+            <td id="books_id_5">用户名</td>
+			<td id="name_5">用户名</td>
+            <td id="author_5">http://amazeui.org</td>
+			<td id="kind_5">用户名</td>
+            <td id="press_5">http://amazeui.org</td>
+			<td id="press_date_5">用户名</td>
+            <td id="price_5">http://amazeui.org</td>
+			<td id="merchant_5">http://amazeui.org</td>
+			<td><button class="am-badge am-badge-secondary" onClick="change(5)">修改</button><button class="am-badge am-badge-danger" onClick="delbook(5)">删除</button></td>
+        </tr>
+        <tr>
+            <td id="books_id_6">用户名</td>
+			<td id="name_6">用户名</td>
+            <td id="author_6">http://amazeui.org</td>
+			<td id="kind_6">用户名</td>
+            <td id="press_6">http://amazeui.org</td>
+			<td id="press_date_6">用户名</td>
+            <td id="price_6">http://amazeui.org</td>
+			<td id="merchant_6">http://amazeui.org</td>
+			<td><button class="am-badge am-badge-secondary" onClick="change(6)">修改</button><button class="am-badge am-badge-danger" onClick="delbook(6)">删除</button></td>
+        </tr>
+		<tr>
+           <td id="books_id_7">用户名</td>
+			<td id="name_7">用户名</td>
+            <td id="author_7">http://amazeui.org</td>
+			<td id="kind_7">用户名</td>
+            <td id="press_7">http://amazeui.org</td>
+			<td id="press_date_7">用户名</td>
+            <td id="price_7">http://amazeui.org</td>
+			<td id="merchant_7">http://amazeui.org</td>
+			<td><button class="am-badge am-badge-secondary" onClick="change(7)">修改</button><button class="am-badge am-badge-danger" onClick="delbook(7)">删除</button></td>
+        </tr>
+		<tr>
+            <td id="books_id_8">用户名</td>
+			<td id="name_8">用户名</td>
+            <td id="author_8">http://amazeui.org</td>
+			<td id="kind_8">用户名</td>
+            <td id="press_8">http://amazeui.org</td>
+			<td id="press_date_8">用户名</td>
+            <td id="price_8">http://amazeui.org</td>
+			<td id="merchant_8">http://amazeui.org</td>
+			<td><button class="am-badge am-badge-secondary" onClick="change(8)">修改</button><button class="am-badge am-badge-danger" onClick="delbook(8)">删除</button></td>
+        </tr>
+    </tbody>
+  </table>
+  <ul class="am-pagination am-pagination-centered">
+  <li ><a href="#" onClick="PAGEchange(-1)">&laquo;</a></li>
+  <li id="bookresultpage1"><a href="#" onClick="gopage(1)" id="P1">1</a></li>
+  <li id="bookresultpage2"><a href="#" onClick="gopage(2)" id="P2">2</a></li>
+  <li id="bookresultpage3"><a href="#" onClick="gopage(3)" id="P3">3</a></li>
+  <li id="bookresultpage4"><a href="#" onClick="gopage(4)" id="P4">4</a></li>
+  <li id="bookresultpage5"><a href="#" onClick="gopage(5)" id="P5">5</a></li>
+  <li><a href="#" onClick="PAGEchange(1)">&raquo;</a></li>
+</ul>
+</div>
+	</div>
+</div>
+
+
+
+	
+<!公共底部>
+ <footer data-am-widget="footer"
+          class="am-footer am-footer-default"
+           data-am-footer="{  }">
+    <div class="am-footer-switch">
+    <span class="am-footer-ysp" data-rel="mobile"
+          data-am-modal="{target: '#am-switch-mode'}">
+          云适配版
+    </span>
+      <span class="am-footer-divider"> | </span>
+      <a id="godesktop" data-rel="desktop" class="am-footer-desktop" href="javascript:">
+          电脑版
+      </a>
+    </div>
+    <div class="am-footer-miscs ">
+
+          <p>由<a href="JKL.html">JKL团队</a>
+            提供技术支持</p>
+        <p>CopyRight©2020  AllMobilize Inc.</p>
+        <p><a href="http://www.beian.miit.gov.cn/">粤ICP备20036114</a></p>
+    </div>
+  </footer>
+
+  <div id="am-footer-modal"
+       class="am-modal am-modal-no-btn am-switch-mode-m am-switch-mode-m-default">
+    <div class="am-modal-dialog">
+      <div class="am-modal-hd am-modal-footer-hd">
+        <a href="javascript:void(0)" data-dismiss="modal" class="am-close am-close-spin " data-am-modal-close>&times;</a>
+      </div>
+      <div class="am-modal-bd">
+          您正在浏览的是
+
+        <span class="am-switch-mode-owner">
+            云适配
+        </span>
+
+        <span class="am-switch-mode-slogan">
+              为您当前手机订制的移动网站。
+        </span>
+      </div>
+    </div>
+  </div>
+<script>
+	start();
+</script>
+<!--[if (gte IE 9)|!(IE)]><!-->
+
+<!--<![endif]-->
+<!--[if lte IE 8 ]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+<script src="assets/js/amazeui.min.js"></script>
+
+</body>
+</html>

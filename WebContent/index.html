@@ -1,0 +1,356 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>JKL书城</title>
+
+  <!-- Set render engine for 360 browser -->
+  <meta name="renderer" content="webkit">
+
+  <!-- No Baidu Siteapp-->
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+  <link rel="icon" type="image/png" href="assets/i/favicon.png">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+  <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+
+  <!-- Tile icon for Win8 (144x144 + tile color) -->
+  <meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+  <meta name="msapplication-TileColor" content="#0e90d2">
+
+  <link rel="stylesheet" href="assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+
+<script src="assets/js/jquery.min.js"></script>
+<script type="text/javascript">
+	function search(){
+		var bookname = document.getElementById("sea").value;
+		window.location.href="result.html?bookname="+bookname;
+	 }
+
+</script>
+</head>
+<!公共头部>
+<header class="am-topbar am-topbar-inverse">
+  <h1 class="am-topbar-brand">
+    <a href="index.html">JKL书城</a>
+  </h1>
+
+  <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#doc-topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+  <div class="am-collapse am-topbar-collapse" id="doc-topbar-collapse">
+    <ul class="am-nav am-nav-pills am-topbar-nav">
+      <li class="am-active"><a href="#">首页</a></li>
+    </ul>
+
+    <form action="" class="am-topbar-form am-topbar-left am-form-inline" role="search" id="search" method="post" onkeydown="if(event.keyCode==13) return false;">
+      <div class="am-form-group">
+        <input name="search" type="text" class="am-form-field am-input-sm" id="sea" placeholder="搜索，直接回车则显示书库">
+		  <input type="text" id="hiddenText" name="hiddenText" style="display:none" />
+      </div>
+    </form>
+<script>	  
+$(document).bind("keydown", function(event){
+ if(event.which=="13")
+   {
+	  search(); 
+	   
+   }
+})
+</script>  
+
+    <div class="am-topbar-right">
+      <a href="login.html" id="user_href"><button class="am-btn am-btn-primary am-topbar-btn am-btn-sm" id="user-button" >登录</button></a>
+    </div>
+  </div>
+</header>
+<body>
+	<script>
+			function setCookie(cname,cvalue,exdays)
+{
+  var d = new Date();
+  d.setTime(d.getTime()+(exdays*24*60*60*1000));
+  var expires = "expires="+d.toGMTString();
+  document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+	
+	function getCookie(cname)
+{
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0; i<ca.length; i++) 
+  {
+    var c = ca[i].trim();
+    if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+  }
+  return "";
+}
+		
+  function start() {
+	  
+            $.ajax({            //几个参数需要注意一下
+                type: "GET",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: "/EComerenceServlet/rank" ,//url
+                data: " ",                
+                success: function (result) {
+                	console.log(result);
+					document.getElementById("Ranking-List1").innerHTML = "1 "+result.ranking_List1;
+					document.getElementById("Ranking-List2").innerHTML = "2 "+result.ranking_List2;
+					document.getElementById("Ranking-List3").innerHTML = "3 "+result.ranking_List3;
+					document.getElementById("Ranking-List4").innerHTML = "4 "+result.ranking_List4;
+					document.getElementById("Ranking-List5").innerHTML = "5 "+result.ranking_List5;
+					
+					document.getElementById("Ranking-List1").href = "book.html?bookid="+result.list1_id;
+					document.getElementById("Ranking-List2").href = "book.html?bookid="+result.list2_id;
+					document.getElementById("Ranking-List3").href = "book.html?bookid="+result.list3_id;
+					document.getElementById("Ranking-List4").href = "book.html?bookid="+result.list4_id;
+					document.getElementById("Ranking-List5").href = "book.html?bookid="+result.list5_id;
+					
+					
+					document.getElementById("free1").innerHTML = "1 "+result.free1;
+					document.getElementById("free2").innerHTML = "2 "+result.free2;
+					document.getElementById("free3").innerHTML = "3 "+result.free3;
+					document.getElementById("free4").innerHTML = "4 "+result.free4;
+					document.getElementById("free5").innerHTML = "5 "+result.free5;
+					
+					document.getElementById("free1").href = "book.html?bookid="+result.free1_id;
+					document.getElementById("free2").href = "book.html?bookid="+result.free2_id;
+					document.getElementById("free3").href = "book.html?bookid="+result.free3_id;
+					document.getElementById("free4").href = "book.html?bookid="+result.free4_id;
+					document.getElementById("free5").href = "book.html?bookid="+result.free5_id;
+					
+                },                
+                error : function() {
+                    alert("异常！");
+                }
+            });
+	
+            var nickname=getCookie("nickname");
+	  		var isAdmin = getCookie("admin");
+            if(nickname != ""){
+		  document.getElementById("user-button").innerHTML = nickname;
+				if (isAdmin == "0"){ 
+					document.getElementById("user_href").href = "user.html"; 
+					}
+				if (isAdmin == "1"){ document.getElementById("user_href").href = "admin.html"; }
+		 
+	  }
+	  
+		}
+	  start();
+</script>
+<!--在这里编写你的代码-->
+  <div style="background:url(https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3744741556,1966499104&fm=26&gp=0.jpg)" data-am-widget="slider" class="am-slider am-slider-c4" data-am-slider='{&quot;controlNav&quot;:false}' align="center" >
+  <ul class="am-slides">
+      <li>
+        <img src="https://img1.doubanio.com/lpic/s8992287.jpg" height="408" width="100"/>
+        <div class="am-slider-desc" align="center"><a href="book.html?bookid=1008">老人与海</a></div>
+      </li>
+    <li>
+        <img src="https://img3.doubanio.com/lpic/s27303091.jpg
+" height="408" width="100"/>
+        <div class="am-slider-desc" align="center"><a href="book.html?bookid=1011">朝花夕拾·呐喊</a></div>
+      </li>
+      <li>
+        <img src="https://img1.doubanio.com/lpic/s2276208.jpg" height="408" width="100"/>
+        <div class="am-slider-desc" align="center"><a href="book.html?bookid=1021">解密上海：大上海再度崛起之谜
+</a></div>
+      </li>
+      <li>
+        <img src="https://img3.doubanio.com/lpic/s3540414.jpg" height="408" width="100"/>
+        <div class="am-slider-desc" align="center"><a href="book.html?bookid=1034">儒林外史</a></div>
+      </li>
+  </ul>
+</div>
+<div style="background-image: url(https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3744741556,1966499104&fm=26&gp=0.jpg)">
+<div align="center">
+<font size="5"><br>
+<strong>出版图书&nbsp;</strong></font>
+<font size="2.5"><br>
+<a href="">类别1</a></font>&nbsp; |&nbsp;
+<font size="2.5">
+<a href="">类别2</a></font>
+</div>
+<div class="am-g am-g-fixed">
+  <div class="am-u-sm-4" align="center">
+	  <font size="+2">
+		<a href="book.html?bookid=906">第九夜<br></a>
+	  </font>
+	<font>作者：骆英<br></font>
+	  <font size='-4'>诗集。《第九夜》将诗集分为"马篇"和"猫篇"，以情欲象征书写"关于一匹马的性感经历及其道德困境"以及"关于一只猫的初夜故事与死亡传奇"。语言大刀阔斧...<br><br></font>
+	  <img src="https://img3.doubanio.com/lpic/s27919375.jpg
+" height="208" width="156">
+	</div>
+  <div class="am-u-sm-4" align="center"> <font size="+2">
+		<a href="book.html?bookid=908">沈从文小说选集<br></a>
+	  </font>
+	<font>作者：沈从文<br></font>
+	  <font size='-4'>"《沈从文小说选》（上下册）为凌宇先生于1980年代初编选的一本沈从文小说集，多年来经我社不断重印，已堪称经典选本。所选作品基本反映了沈从文小说创作发展的...
+<br><br></font>
+	  <img src="https://img3.doubanio.com/lpic/s28123252.jpg
+" height="208" width="156" ></div>
+<div class="am-u-sm-4" align="center">
+	<div class="am-panel am-panel-warning">
+  <div class="am-panel-hd">
+	  <i class="fas fa-book"></i>
+    <h3 class="am-panel-title" style="font-size: 20px">排行榜</h3>
+  </div>
+  <div class="am-panel-bd">	
+   <a href=""  style="font-size: 15px" id="Ranking-List1">1 三体全集（全3册）</a>
+	 <script>
+	</script>
+  </div>
+  <ul class="am-list am-list-static">
+    <li><a href=""  style="font-size: 15px" id="Ranking-List2">2 三体全集（全3册）</a></li>
+  </ul>
+<ul class="am-list am-list-static">
+   <li><a href=""  style="font-size: 15px" id="Ranking-List3">3 三体全集（全3册）</a></li>
+  </ul>
+	<ul class="am-list am-list-static">
+   <li><a href=""  style="font-size: 15px" id="Ranking-List4">4 三体全集（全3册）</a></li>
+  </ul>
+	<ul class="am-list am-list-static">
+   <li><a href=""  style="font-size: 15px" id="Ranking-List5">5 三体全集（全3册）</a></li>
+  </ul>
+  <div class="am-panel-footer">...</div>
+</div>
+</div>
+<div align="center">
+	<div class="am-g am-g-fixed">
+  <div class="am-u-sm-4" align="center">
+	  <font size="+2">
+		<a href="book.html?bookid=909">群魔(上下册)<br></a>
+	  </font>
+	<font>作者：[俄] 陀思妥耶夫斯基
+<br></font>
+	  <font size='-4'>《群魔》是俄国作家陀思妥耶夫斯基创作中最阴郁的一部小说，由于影射了当时进步的革命阵营，也被认为是他最反动的作品。小说取材于俄国史上一桩真实的杀人案...<br><br></font>
+	  <img src="https://img3.doubanio.com/lpic/s28287141.jpg
+"  height="208" width="156">
+	</div>
+  <div class="am-u-sm-4" align="center"> <font size="+2">
+		<a href="book.html?bookid=929">接头<br></a>
+	  </font>
+	<font>作者：龙一<br></font>
+	  <font size='-4'>一个中共地下工作者建立情报网的故事，被赋予了光怪陆离的色彩。外表儒雅且多智的"中统"特务、阴谋抢夺儿子的大哥兼租界巡捕头子、装傻充愣的美国间谍、邪恶 的日本侵...<br><br></font>
+	  <img src="https://img3.doubanio.com/lpic/s28038983.jpg
+"  height="208" width="156"></div>
+<div class="am-u-sm-4" align="center">
+	<div class="am-panel am-panel-warning">
+  <div class="am-panel-hd">
+	  <i class="fas fa-book"></i>
+    <h3 class="am-panel-title" style="font-size: 20px">今日免费</h3>
+  </div>
+  <div class="am-panel-bd">
+    <a href=""  style="font-size: 15px" id="free1">1 三体全集（全3册）</a>
+  </div>
+  <ul class="am-list am-list-static">
+    <li><a href=""  style="font-size: 15px" id="free2">2 三体全集（全3册）</a></li>
+  </ul>
+<ul class="am-list am-list-static">
+   <li><a href=""  style="font-size: 15px" id="free3">3 三体全集（全3册）</a></li>
+  </ul>
+	<ul class="am-list am-list-static">
+   <li><a href=""  style="font-size: 15px" id="free4">4 三体全集（全3册）</a></li>
+  </ul>
+	<ul class="am-list am-list-static">
+   <li><a href=""  style="font-size: 15px" id="free5">5 三体全集（全3册）</a></li>
+  </ul>
+  <div class="am-panel-footer">...</div>
+</div>
+</div>
+</div>
+</div>
+
+
+</div>
+
+	
+<!公共底部>
+ <footer data-am-widget="footer"
+          class="am-footer am-footer-default"
+           data-am-footer="{  }">
+    <div class="am-footer-switch">
+    <span class="am-footer-ysp" data-rel="mobile"
+          data-am-modal="{target: '#am-switch-mode'}">
+          云适配版
+    </span>
+      <span class="am-footer-divider"> | </span>
+      <a id="godesktop" data-rel="desktop" class="am-footer-desktop" href="javascript:">
+          电脑版
+      </a>
+    </div>
+    <div class="am-footer-miscs ">
+
+          <p>由<a href="JKL.html">JKL团队</a>
+            提供技术支持</p>
+        <p>CopyRight©2020  AllMobilize Inc.</p>
+        <p><a href="http://www.beian.miit.gov.cn/">粤ICP备20036114</a></p>
+    </div>
+  </footer>
+
+  <div id="am-footer-modal"
+       class="am-modal am-modal-no-btn am-switch-mode-m am-switch-mode-m-default">
+    <div class="am-modal-dialog">
+      <div class="am-modal-hd am-modal-footer-hd">
+        <a href="javascript:void(0)" data-dismiss="modal" class="am-close am-close-spin " data-am-modal-close>&times;</a>
+      </div>
+      <div class="am-modal-bd">
+          您正在浏览的是
+
+        <span class="am-switch-mode-owner">
+            云适配
+        </span>
+
+        <span class="am-switch-mode-slogan">
+              为您当前手机订制的移动网站。
+        </span>
+      </div>
+    </div>
+  </div>
+	
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="your-modal">
+  <div class="am-modal-dialog">
+    <div class="am-modal-hd">声明
+      <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+    </div>
+    <div class="am-modal-bd">
+      这是由三名热爱计算机的大学生团队开发的小项目.<br>前端由yyChen完成，以Amaze UI开源框架为核心编写的纯静态页面。
+		<br>后台由在线卑微啊乐完成，以Serverlet和tomocat为框架.<br>数据库则是由小小柯使用mysql完成设计。<br>本项目完全采用前后端分离的开发模式，部署在Centos 7服务器上。<br>本项目所有有关金钱的均为虚拟货币，不提供真实货币的入口，仅个人学习交流使用。
+    </div>
+  </div>
+</div>
+<script>
+  $(function() {
+    var $modal = $('#your-modal');
+ $modal.modal();
+      
+      });
+</script>
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+
+<!--<![endif]-->
+<!--[if lte IE 8 ]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+<script src="assets/js/amazeui.min.js"></script>
+
+</body>
+</html>

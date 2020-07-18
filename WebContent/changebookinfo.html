@@ -1,0 +1,199 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>Hello Amaze UI</title>
+
+  <!-- Set render engine for 360 browser -->
+  <meta name="renderer" content="webkit">
+
+  <!-- No Baidu Siteapp-->
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+  <link rel="icon" type="image/png" href="assets/i/favicon.png">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+  <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+
+  <!-- Tile icon for Win8 (144x144 + tile color) -->
+  <meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+  <meta name="msapplication-TileColor" content="#0e90d2">
+
+  <link rel="stylesheet" href="assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+	<script src="assets/js/jquery.min.js"></script>
+<script type="text/javascript">
+
+        function changebookinfo() {
+            $.ajax({            //几个参数需要注意一下
+                type: "POST",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: "/EComerenceServlet/update_book_save" ,//url
+                data: $('#user-r-from').serialize(),                
+                success: function (respond) {                    
+                if(respond.result=="true"){
+					alert("修改成功");
+				}
+                    
+                },                
+                error : function() {
+                    alert("异常！");
+                }
+            });
+        }  
+	
+	function getQueryString(name) {
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null) return r[2]; return null;
+}
+	
+		function getCookie(cname)
+{
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0; i<ca.length; i++) 
+  {
+    var c = ca[i].trim();
+    if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+  }
+  return "";
+}
+	
+	function start(){
+			var isAdmin=getCookie("admin");
+		if ( isAdmin=="1" ){
+		}else{
+				alert("非管理员登录！");
+			window.location.href="login.html";
+		return false;
+		}
+		
+		var userid = getCookie("userid");
+		var books_id = getQueryString("books_id");
+	
+		
+		$.ajax({            //几个参数需要注意一下
+                type: "POST",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: "/EComerenceServlet/book" ,//url
+                data: "userid="+userid+"&book_id="+books_id,                
+                success: function (respond) {                    
+               if(respond.result=="true"){
+				   
+				   document.getElementById("books_id").value=books_id;
+				   document.getElementById("name").value=respond.bookname;
+				   document.getElementById("author").value=respond.author;
+				   document.getElementById("press").value=respond.press;
+				   document.getElementById("press_date").value=respond.press_date;
+				   document.getElementById("price").value=respond.price;
+				   document.getElementById("merchant_id").value=respond.merchant_id;
+				   
+			   }else{
+				   alert("查询书籍信息失败");
+			   }
+                    
+                },                
+                error : function() {
+                    alert("异常！");
+                }
+            });
+		
+	}
+	
+	</script>
+<!公共头部>
+<header class="am-topbar am-topbar-inverse">
+  <h1 class="am-topbar-brand">
+    <a href="index.html" style="font-size: 20px">Amaze UI</a>
+  </h1>
+<p align="center" style="font-size: 20px">修改书籍资料
+	</p>
+</header>
+<body style="background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1590507221209&di=d5f2da7f029dd4446ef17513847bb249&imgtype=0&src=http%3A%2F%2Fimg.pptjia.com%2Fimage%2F20190112%2F3315c21e73b6a71bd702772a74f54522.jpg)">
+<div class="am-g" align="center" >
+  <div class="am-u-sm-2" style="font-size: 1px">1</div>
+  <div class="am-u-sm-8">
+	<div style="width: 50%;height: 50%;text-align: center">
+	<form action="" class="am-form" data-am-validator method="get" id="user-r-from">
+  <fieldset>
+    <legend>修改书籍资料</legend>
+	  
+	   <div class="am-form-group">
+      <label for="doc-vld-name-2">书id：</label>
+      <input name="books_id" type="text" id="books_id" minlength="3"  value="user" readonly/>
+    </div>
+	  
+    <div class="am-form-group">
+      <label for="doc-vld-name-2">书名：</label>
+      <input name="name" type="text" id="name" minlength="3" placeholder="输入书名" value="user" required/>
+    </div>
+	  
+	  <div class="am-form-group">
+      <label for="doc-vld-name-true">作者：</label>
+      <input name="author" type="text" id="author" placeholder="输入作者" value="user" >
+    </div>
+	  
+	  
+	   <div class="am-form-group">
+      <label for="doc-vld-ID-2">出版社：</label>
+      <input name="press" type="text" id="press" placeholder="出版社" required/ >
+    </div> 
+	  
+<div class="am-form-group">
+      <label for="doc-vld-ID-2">类型：</label>
+      <input name="kind" type="text" id="kind" placeholder="类型" required/ >
+    </div> 
+ 
+	  <div class="am-form-group am-form-icon">
+	<label for="doc-vld-pwd-1">出版日期：</label>
+	<i class="am-icon-calendar"></i>
+    <input type="date" class="am-form-field" id="press_date" name="press_date" placeholder="出版日期"  required/>
+  </div>
+	
+
+	  
+	   <div class="am-form-group">
+      <label for="doc-vld-pwd-1">价格：</label>
+      <input name="price" type="text"  id="price" placeholder="价格" value="12" required/>
+    </div>
+
+	   <div class="am-form-group">
+      <label for="doc-vld-address-2">管理员id：</label>
+      <input name="merchant_id" type="text" id="merchant_id" placeholder="输入地址" value="123" readonly/ >
+    </div> 
+
+	  
+    <button class="am-btn am-btn-secondary " type="submit" id="regesit-button" onClick="changebookinfo()">确认修改</button>
+  </fieldset>
+</form>
+</div>
+</div>
+  <div class="am-u-sm-2"><p hidden>1</p></div>
+</div>
+<script>start();</script>
+<!--在这里编写你的代码-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+
+<!--<![endif]-->
+<!--[if lte IE 8 ]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+<script src="assets/js/amazeui.min.js"></script>
+</body>
+</html>

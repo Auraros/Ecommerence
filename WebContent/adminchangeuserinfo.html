@@ -1,0 +1,211 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>Hello Amaze UI</title>
+
+  <!-- Set render engine for 360 browser -->
+  <meta name="renderer" content="webkit">
+
+  <!-- No Baidu Siteapp-->
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+  <link rel="icon" type="image/png" href="assets/i/favicon.png">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+  <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+
+  <!-- Tile icon for Win8 (144x144 + tile color) -->
+  <meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+  <meta name="msapplication-TileColor" content="#0e90d2">
+
+  <link rel="stylesheet" href="assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+	<script src="assets/js/jquery.min.js"></script>
+<script type="text/javascript">
+	
+	function getQueryString(name) {
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null) return r[2]; return null;
+}
+	
+	function start(){
+		window.userid  = getQueryString("user_id");
+		var isAdmin = getCookie("admin");
+		if (isAdmin != "1"){
+			alert("非管理员登录！");
+			window.location.href= "login.html";
+			return false;
+		}
+		$.ajax({            //几个参数需要注意一下
+                type: "POST",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: "/EComerenceServlet/user" ,//url
+                data: "userid="+userid,                
+                success: function (respond) {                    
+                console.log(respond);//打印服务端返回的数据(调试用)
+			
+                    document.getElementById("nickname").value = respond.nickname; 
+					document.getElementById("real_name").value = respond.real_name;
+					document.getElementById("id_card").value = respond.id_card;
+					document.getElementById("phone_number").value = respond.phone_number;
+					document.getElementById("email").value = respond.email
+					document.getElementById("address").value = respond.address;
+					document.getElementById("password").value = respond.password;
+					document.getElementById("birthday").value = respond.birthday;
+					if(respond.sex=="男"){document.getElementById("sex_g").checked="checked";}
+					if(respond.sex=="女"){document.getElementById("sex_m").checked="checked";}
+			
+                },                
+                error : function() {
+                    alert("异常！");
+                }
+            });
+		
+		
+	}
+
+        function change() {
+            $.ajax({            //几个参数需要注意一下
+                type: "POST",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: "/EComerenceServlet/changeinfo_save" ,//url
+                data: $('#user-r-from').serialize(),                
+                success: function (respond) {                    
+                console.log(respond);//打印服务端返回的数据(调试用)
+                    if (respond.result=="true"){
+						alert("修改成功");
+						window.location.href="userresult.html";
+					}else{alert("修改失败");}
+                },                
+                error : function() {
+                    alert("异常！");
+                }
+            });
+        }   
+	
+		function getCookie(cname)
+{
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0; i<ca.length; i++) 
+  {
+    var c = ca[i].trim();
+    if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+  }
+  return "";
+}
+	
+	</script>
+<!公共头部>
+<header class="am-topbar am-topbar-inverse">
+  <h1 class="am-topbar-brand">
+    <a href="index.html" style="font-size: 20px">JKL书城</a>
+  </h1>
+<p align="center" style="font-size: 20px">修改资料
+	</p>
+</header>
+<body style="background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1590507221209&di=d5f2da7f029dd4446ef17513847bb249&imgtype=0&src=http%3A%2F%2Fimg.pptjia.com%2Fimage%2F20190112%2F3315c21e73b6a71bd702772a74f54522.jpg)">
+<div class="am-g" align="center" >
+  <div class="am-u-sm-2" style="font-size: 1px">1</div>
+  <div class="am-u-sm-8">
+	<div style="width: 50%;height: 50%;text-align: center">
+	<form action="" class="am-form" data-am-validator method="post" id="user-r-from">
+  <fieldset>
+    <legend>修改资料</legend>
+    <div class="am-form-group">
+      <label for="doc-vld-name-2">用户名：</label>
+      <input name="nickname" type="text" id="nickname" minlength="3" placeholder="输入用户名（至少 3 个字符）" value="" required/>
+    </div>
+	  
+	  <div class="am-form-group">
+      <label for="doc-vld-name-true">真实姓名：</label>
+      <input name="real_name" type="text" id="real_name" placeholder="输入真实姓名" value="" required/>
+    </div>
+	  
+	  
+	   <div class="am-form-group">
+      <label for="doc-vld-ID-2">身份证号码：</label>
+      <input name="id_card" type="text" id="id_card" placeholder="输入身份证号码" pattern="^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$"  value="" required/ >
+    </div> 
+	  
+	   <div class="am-form-group">
+      <label for="doc-vld-tel-2">手机号码：</label>
+      <input name="phone_number" type="text" id="phone_number" placeholder="输入手机号码" pattern="^1((3|5|8){1}\d{1}|70)\d{8}$" value="" required >
+    </div> 
+	  
+	    <div class="am-form-group">
+      <label for="doc-vld-email-2">邮箱：</label>
+      <input name="email" type="email" id="email" placeholder="输入电子邮箱"  value="" required >
+    </div> 
+	  
+	     <div class="am-form-group">
+      <label for="doc-vld-address-2">地址：</label>
+      <input name="address" type="text" id="address" placeholder="输入地址" value="" required/ >
+    </div> 
+ 
+	  <div class="am-form-group am-form-icon">
+	<label for="doc-vld-pwd-1">生日：</label>
+	<i class="am-icon-calendar"></i>
+    <input type="date" class="am-form-field" placeholder="日期" name="birthday" id="birthday" required/>
+  </div>
+	
+
+	  
+	   <div class="am-form-group">
+      <label for="doc-vld-pwd-1">密码：</label>
+      <input name="password" type="password" id="password" placeholder="输入不超过20个字符的密码" maxlenth=20 value="" required/>
+    </div>
+
+    <div class="am-form-group">
+      <label for="doc-vld-pwd-2">确认密码：</label>
+      <input type="password" id="doc-vld-pwd-2" placeholder="请与上面输入的值一致" data-equal-to="#doc-vld-pwd-1" required/>
+    </div>
+	  
+	   <div class="am-form-group ">
+      <label>性别： </label>
+      <label class="am-btn am-btn-primary">
+        <input name="sex" type="radio"  value="男" id="sex_g" required/> 男
+      </label>
+      <label class="am-btn am-btn-primary">
+        <input name="sex" type="radio" value="女" id="sex_m" required/> 女
+      </label>
+	  </div>
+	  
+    <button class="am-btn am-btn-secondary " type="button" id="change-button" onClick="change()">确认修改</button>
+  </fieldset>
+</form>
+ <a href="userresult.html"><button class="am-btn am-btn-secondary ">返回</button></a>
+</div>
+</div>
+  <div class="am-u-sm-2"><p hidden>1</p></div>
+</div>
+<script>
+	start();
+</script>
+<!--在这里编写你的代码-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+
+<!--<![endif]-->
+<!--[if lte IE 8 ]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+<script src="assets/js/amazeui.min.js"></script>
+</body>
+</html>

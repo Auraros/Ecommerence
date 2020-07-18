@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>充钱</title>
+<script src="assets/js/jquery.min.js"></script>
+</head>
+
+<body>
+	
+	<script>
+			function getCookie(cname)
+{
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0; i<ca.length; i++) 
+  {
+    var c = ca[i].trim();
+    if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+  }
+  return "";
+}
+
+		function addmoneyr(){
+			var userid = getCookie("userid");
+			var isAdmin = getCookie("admin");
+			if (!userid){
+				alert("未登录！");
+				window.location.href="login.html";
+				return false;
+			}
+			if (isAdmin != "0"){
+				alert("无效的登录权限！请关闭页面后使用普通用户登录");
+				return false;
+			}
+
+		var addmoney = prompt("充多少？","10");
+			if (!addmoney) {alert("用户取消充值！");
+			return false;}
+
+			$.ajax({            //几个参数需要注意一下
+                type: "POST",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: "/EComerenceServlet/addmoney" ,//url
+                data: "userid="+userid+"&addmoney="+addmoney,                
+                success: function (respond) {
+                if (respond.result=="true"){
+					alert("充值成功！请关闭此页面后刷新个人资料查看余额 ，可能存在5-10分钟的延迟，如有疑问请联系本站。");
+				}else{alert("充值失败！");}
+                },                
+                error : function() {
+                    alert("异常！");
+                }
+            });
+		}
+		addmoneyr();
+		</script>
+</body>
+</html>
